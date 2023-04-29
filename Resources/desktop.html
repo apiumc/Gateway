@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <title>Apiumc · 云桌面</title>
+    <link href="/css/weui.css" rel="stylesheet" type="text/css" />
+    <link href="/css/base.css" rel="stylesheet" type="text/css" />
+    <link href="/css/icon.css" rel="stylesheet" type="text/css" />
+    <link href="/css/umc.ui.css" rel="stylesheet" type="text/css" />
+    <link href="/css/umc.css" rel="stylesheet" type="text/css" />
+    <link href="/css/umc.desktop.css" rel="stylesheet" type="text/css" />
+    <script src="/js/umc.js"></script>
+    <script src="/UMC.Conf" type="text/javascript"></script>
+    <script src="/js/umc.database.js"></script>
+    <script src="/js/umc.grid.js"></script>
+    <script src="/js/umc.dialog.js"></script>
+    <script src="/js/umc.ui.js"></script>
+    <script src="/js/umc.page.js"></script>
+    <script src="/js/umc.desktop.js"></script>
+
+</head>
+
+<body>
+    <div role="alert" class="el-message el-message--warning el-message-fade-leave el-message-fade-leave-active">
+        <i class="el-message__icon el-icon-success"></i>
+        <p class="el-message__content"></p>
+    </div>
+    <div id="win10">
+        <div class="umc-desktop">
+            <div class="umc-shortcuts">
+            </div>
+            <ul role="menu" class="umc-shortcut-menu">
+
+                <!--<li>
+        <a data-key="pwd"><b class="wdk_cell_icon" data-icon="&#xf214;"></b> 获取临时口令</a>
+    </li>-->
+
+                <li>
+                    <a data-key="del"><b class="wdk_cell_icon" data-icon="&#xf127;"></b> 移除关联账户</a>
+
+                </li>
+                <li>
+                    <a data-key="user"><b class="wdk_cell_icon" data-icon="&#xf234;"></b> 设置多个账户</a>
+
+                </li>
+                <li>
+                    <a data-key="remove"><b class="wdk_cell_icon" data-icon="&#xf112;"></b> 从桌面中移除</a>
+
+                </li>
+                <li>
+                    <a data-key="about"><b class="wdk_cell_icon" data-icon="&#xf0f6;"></b> 关于应用说明</a>
+
+                </li>
+
+            </ul>
+        </div>
+
+        <img class="umc-desktop-bg" />
+    </div>
+
+
+    <div id="appstore" class="hide">
+        <div class="umc-appstore-search">
+            <input type="text" placeholder="搜索">
+
+        </div>
+        <div class="umc-appstore-list" id="apps-list"></div>
+
+        <img class="umc-desktop-bg" />
+    </div>
+    <ul role="menu" class="umc-appstore-menu">
+        <li>
+            <a data-key="plus"><b class="wdk_cell_icon" data-icon="&#xf26c;"></b> 添加到云桌面</a>
+        </li>
+        <!--<li>
+        <a data-key="use"><b class="wdk_cell_icon" data-icon="&#xf1e7;"></b> 人员使用情况</a>
+
+    </li>-->
+        <li>
+            <a data-key="help"><b class="wdk_cell_icon" data-icon="&#xf059;"></b> 查看帮助文档</a>
+
+        </li>
+        <li>
+            <a data-key="about"><b class="wdk_cell_icon" data-icon="&#xf0f6;"></b> 关于应用说明</a>
+
+        </li>
+    </ul>
+
+    <div class="umc-task_bar">
+        <div class="umc-bar-item">
+            <a class="el-dropdown">
+                <img alt="" class="umc-logo-icon" />
+            </a>
+            <ul role="menu" class="umc-logo-menu">
+                <li>
+                    <img class="umc-logo-icon" alt="" />
+                    <div class="umc-logo-name"></div>
+                </li>
+                <li>
+                    <a data-key="desktop" class="icon-data" data-icon="&#xf03e;">桌面图片</a>
+                </li>
+                <li>
+                    <a model="Account" cmd="Self"><b class="wdk_cell_icon" data-icon="&#xf2ba;"></b> 我的信息</a>
+                </li>
+                <li>
+                    <a model="Account" cmd="Close"><b class="wdk_cell_icon" data-icon="&#xf011;"></b> 退出登录</a>
+
+                </li>
+
+            </ul>
+        </div>
+        <div class="umc-bar-item">
+            <a class="umc-task_bar-app el-dropdown hide"><span></span></a>
+            <ul role="menu">
+                <li>
+                    <a model="Proxy" cmd="App" class="icon-data" data-icon="&#xf05a;">  关于</a>
+                </li>
+                <li>
+                    <a data-key="hide" class="icon-data" data-icon="&#xf24d;">隐藏其他</a>
+                </li>
+                <li>
+                    <a data-key="other" class="icon-data" data-icon="&#xf070;">隐藏其他应用</a>
+                </li>
+                <li>
+                    <a data-key="all" class="icon-data" data-icon="&#xf06e;">显示全部</a>
+
+                </li>
+                <li>
+                    <a data-key="exit" class="icon-data" data-icon="&#xf192;"> 退出</a>
+
+                </li>
+            </ul>
+        </div>
+        <div id="umc-desktop-menu" class="umc-bar-item">
+            <ul class="umc-desktop-menu">
+            </ul>
+
+        </div>
+        <div class="umc-bar-item">
+            <a class="umc-task_bar-wins el-dropdown hide"><span>窗口</span></a>
+            <ul role="menu">
+            </ul>
+        </div>
+        <div class="umc-bar-item umc-bar-item_right">
+            <a id="umc-desktop-apps"><span class="icon-data" data-icon="&#xf00a;"></span></a>
+        </div>
+        <div class="umc-bar-item umc-bar-item_right">
+            <a id="umc-desktop-task" class="el-dropdown"><span class="icon-data" data-icon="&#xf26c;"></span></a>
+            <ul role="menu">
+                <li>
+                    <a data-key="show" class="umc-desktop-show" data-icon="&#xf108;">显示我的桌面</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>

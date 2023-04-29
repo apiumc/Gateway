@@ -1,0 +1,78 @@
+﻿<!doctype html>
+<html>
+
+<head>
+    <title>API UMC</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <link href="/UMC.css/weui.css" rel="stylesheet" type="text/css" />
+    <link href="/UMC.css/base.css" rel="stylesheet" type="text/css" />
+    <link href="/UMC.css/icon.css" rel="stylesheet" type="text/css" />
+    <link href="/UMC.css/umc.ui.css" rel="stylesheet" type="text/css" />
+    <link href="/UMC.css/umc.css" rel="stylesheet" type="text/css" />
+    <script src="/UMC.js/umc.js" type="text/javascript"></script>
+    <script src="/UMC.Conf"></script>
+    <script src="/UMC.js/umc.date.js"></script>
+    <script src="/UMC.js/umc.database.js"></script>
+    <script src="/UMC.js/umc.grid.js"></script>
+    <script src="/UMC.js/umc.dialog.js"></script>
+    <script src="/UMC.js/umc.ui.js"></script>
+    <script src="/UMC.js/umc.page.js"></script>
+    <script src="/UMC.js/umc.paging.js"></script>
+    <script src="/UMC.js/umc.app.js"></script>
+
+</head>
+
+<body>
+    <div role="alert" class="el-message el-message--warning el-message-fade-leave el-message-fade-leave-active" style="z-index: 2100;">
+        <i class="el-message__icon el-icon-success"></i>
+        <p class="el-message__content"></p>
+    </div>
+    <div id="app">
+        <div class="sidebar-container">
+            <div class="sidebar-logo-container">
+
+                <a model="Account" cmd="Self" send="Cashier" class="box-card-component" data-name="">
+                    <img alt="" class="pan-thumb" />
+                </a><div class="umc-logo-name"></div>
+            </div>
+            <div class="el-scrollbar">
+                <div class="scrollbar-wrapper el-scrollbar__wrap">
+                    <div class="el-scrollbar__view">
+                        <ul id="menubar" class="el-menu" style="background-color: rgb(48, 65, 86);"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-container">
+            <div class="navbar">
+                <div id="hamburger-container" class="hamburger-container" style="padding: 0px 15px;"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="64" height="64" class="hamburger is-active"><path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM142.4 642.1L298.7 519a8.84 8.84 0 0 0 0-13.9L142.4 381.9c-5.8-4.6-14.4-.5-14.4 6.9v246.3a8.9 8.9 0 0 0 14.4 7z"></path></svg></div>
+                <div class="el-breadcrumb app-breadcrumb breadcrumb-container" id="breadcrumb-container">
+                    <span class="no-redirect">API UMC</span>
+                </div>
+                <div class="right-menu" id="menu" style="min-width:6em">
+
+                </div>
+                <div class="right-menu">
+                    <div class="header-search right-menu-item show el-dropdown hide" id="header-search">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" id="icon-search" class="svg-icon search-icon"><path d="M124.884 109.812L94.256 79.166c-.357-.357-.757-.629-1.129-.914a50.366 50.366 0 0 0 8.186-27.59C101.327 22.689 78.656 0 50.67 0 22.685 0 0 22.688 0 50.663c0 27.989 22.685 50.663 50.656 50.663 10.186 0 19.643-3.03 27.6-8.201.286.385.557.771.9 1.114l30.628 30.632a10.633 10.633 0 0 0 7.543 3.129c2.728 0 5.457-1.043 7.543-3.115 4.171-4.157 4.171-10.915.014-15.073M50.671 85.338C31.557 85.338 16 69.78 16 50.663c0-19.102 15.557-34.661 34.67-34.661 19.115 0 34.657 15.559 34.657 34.675 0 19.102-15.557 34.661-34.656 34.661"></path></svg>
+                        <form class="el-select header-search-select el-select--small">
+                            <!---->
+                            <div class="el-input el-input--small el-input--suffix">
+                                <input type="search" autocomplete="off" placeholder="Search" class="el-input__inner">
+                            </div>
+
+                        </form>
+                    </div>
+                    <ul role="menu" class="umc-search-menu">
+                    </ul>
+                </div>
+            </div>
+            <section class="app-main"></section>
+
+        </div>
+    </div>
+</body>
+
+</html>

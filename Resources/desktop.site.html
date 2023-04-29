@@ -1,0 +1,175 @@
+﻿<!doctype html>
+<html>
+
+<head>
+    <title>应用设置</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <link href="/css/weui.css" rel="stylesheet" type="text/css" />
+    <link href="/css/base.css" rel="stylesheet" type="text/css" />
+    <link href="/css/icon.css" rel="stylesheet" type="text/css" />
+    <link href="/css/umc.ui.css" rel="stylesheet" type="text/css" />
+    <link href="/css/umc.css" rel="stylesheet" type="text/css" />
+    <script src="/js/umc.js" type="text/javascript"></script>
+
+    <style>
+        .app-main {
+            height: 100vh;
+        }
+
+        #app .main-container {
+            margin: 0px !important;
+        }
+    </style>
+    <script src="/js/umc.date.js"></script>
+    <script src="/js/umc.page.js"></script>
+    <script src="/js/umc.paging.js"></script>
+    <script>(function ($) {
+
+            $.Src = '/UMC.UI/';
+
+            var callFn = {};
+            var callJ = 0;
+            UMC.UI.Bridge = function (v, fn) {
+                var key = 'd' + callJ;
+                callFn[key] = fn;
+                callJ++;
+                window.top.postMessage(JSON.stringify({
+                    type: 'umc',
+                    value: v,
+                    key: key
+                }), "*");
+
+            }
+
+            $(function () {
+                var app = $('section.app-main');
+                UMC(document.body).on('UI.Key.Url', function (e, v) {
+                    location.href = v;
+                })
+                $.UI.On('UI.Push', function (e, xhr) {
+
+                    var last = app.children('div.ui').cls('ui', 0);
+                    if (last.on('backstage') !== false)
+                        last.remove();
+                    if (xhr.root.cls('ui', 1).parent()[0] != app[0]) {
+                        xhr.root.appendTo(app);
+                    }
+                    xhr.root.on('active');
+
+                    var v = {
+                        title: xhr.title,
+                        menu: xhr.menu || []
+                    }
+                    if (xhr.search) {
+                        v.search = true;
+                    }
+                    window.top.postMessage(JSON.stringify({
+                        type: 'page',
+                        value: v
+                    }), "*");
+
+
+                });
+
+
+                $(window).on('message', function (e) {
+                    var data = {};
+                    try {
+                        data = JSON.parse(e.data);
+                    } catch (c) {
+                        return;
+                    }
+                    switch (data.type) {
+                        case 'searchValue':
+                            app.children('div[ui].ui').on('searchValue', data.data)
+                            break;
+                        case 'search':
+                            var root = app.children('div[ui].ui');
+                            root.on('search', data.data) !== false ?
+                                root.find('.pagination-container')
+                                    .on('search', data.data) : 0;
+                            break;
+                        case 'event':
+                            app.children('div[ui].ui').last().on('event', data.data);
+                            break;
+                        case 'click':
+                            $.Click(data.data);
+                            break;
+                        case 'umc':
+                            var fn = callFn[data.key] || $.UI.Ready;
+                            delete callFn[data.key];
+                            fn(data.data);
+                            break;
+                    }
+                }).on('search', function (e, t) {
+                    if (Array.isArray(t)) {
+                        window.top.postMessage(JSON.stringify({
+                            type: 'search',
+                            value: t
+                        }), "*");
+                    }
+                }).on('menu', function (e, t) {
+                    window.top.postMessage(JSON.stringify({
+                        type: 'menu',
+                        value: t
+                    }), "*");
+                }).on('title', function (e, t) {
+                    window.top.postMessage(JSON.stringify({
+                        type: 'title',
+                        value: t
+                    }), "*");
+                }).on('fullscreenchange,webkitfullscreenchange,mozfullscreenchange', function () {
+                    $(document.body).cls('umc-fullscreen', document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen);
+                });
+
+
+                var key = location.pathname.substring(9);
+                $.page('proxy/org', false).page('proxy/auth', false).page('proxy/menu', false);
+
+                window.top.postMessage(JSON.stringify({
+                    type: 'nav',
+                    value: [{
+                        click: {
+                            key: 'Url',
+                            send: '#proxy/org?Site=' + key
+                        }, text: '应用账户'
+                    }, {
+                        click: {
+                            key: 'Url',
+                            send: '#proxy/auth?Site=' + key
+                        }, text: '应用授权'
+                    }, {
+                        click: {
+                            key: 'Url',
+                            send: '#proxy/menu?Site=' + key
+                        }, text: '应用菜单'
+                    }, {
+                        click: {
+                            model: 'Proxy',
+                            cmd: 'Site',
+                            send: key
+                        }, text: '应用配置'
+                    }]
+                }), "*");
+
+                $(window).on('page', 'proxy/org', 'Site=' + key)
+
+
+            });
+
+        })(UMC);</script>
+</head>
+
+<body>
+    <div id="app">
+
+        <div class="main-container">
+            <section class="app-main">
+            </section>
+
+        </div>
+    </div>
+</body>
+
+</html>

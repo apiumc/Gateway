@@ -1,0 +1,87 @@
+﻿<!doctype html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>帮助文档</title>
+    <link href="/css/weui.css" rel="stylesheet" type="text/css" />
+    <link href="/css/base.css" rel="stylesheet" type="text/css" />
+    <link href="/css/icon.css" rel="stylesheet" type="text/css" />
+    <link href="/css/umc.ui.css" rel="stylesheet" type="text/css" />
+    <link href="/css/umc.css" rel="stylesheet" type="text/css" />
+    <link href="/css/umc.sub.css" rel="stylesheet" type="text/css" />
+    <script src="/js/umc.js" type="text/javascript"></script>
+    <script>
+        UMC.Src = '/UMC.UI/';
+        UMC.SPA = '/';
+    </script>
+
+    <script src="/js/umc.database.js"></script>
+    <script src="/js/umc.grid.js"></script>
+    <script src="/js/umc.dialog.js"></script>
+    <script src="/js/umc.ui.js"></script>
+    <script src="/js/umc.page.js"></script>
+    <script src="/js/umc.subitem.js"></script>
+
+    <script src="/js/Docs.Conf.js"></script>
+
+    <style>
+        .umc-subject-view {
+            height: 100vh;
+        }
+        .umc-subject-footer {
+            height: 50px;
+            line-height: 50px;
+            margin: 0px;
+        }
+        .umc-subject-view section > .weui_cells:first-of-type {
+            min-height: calc(100vh - 50px);
+        }
+        #menubar.el-menu:empty,
+        .umc-subject-view section > .weui_cells:first-of-type:before {
+            display: none
+        }
+        .umc-subitem {
+            min-height: calc(100vh - 180px);
+        }
+        .umc-subject-view img[original-src] {
+            cursor:pointer
+        }
+    </style>
+</head>
+
+<body>
+
+    <div role="alert" class="el-message el-message--warning el-message-fade-leave el-message-fade-leave-active" style="z-index: 2100;">
+        <i class="el-message__icon el-icon-success"></i>
+        <p class="el-message__content"></p>
+        <!---->
+    </div>
+    <div id="app">
+        <div class="sidebar-container" style="top:0px;height:100%">
+
+            <div class="el-scrollbar">
+                <div class="scrollbar-wrapper el-scrollbar__wrap">
+                    <div class="el-scrollbar__view">
+                        <!--%publish%-->
+                        <div id="menubar" class="el-menu"></div>
+                        <!--%end%-->
+                        <div class="el-menu"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-container">
+            <!--%publish%-->
+            <section class="app-main" style=" height:100vh"></section>
+            <!--%end%-->
+        </div>
+    </div>
+
+</body>
+
+
+</html>

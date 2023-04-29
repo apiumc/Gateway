@@ -1,0 +1,161 @@
+﻿<!doctype html>
+<html>
+
+<head>
+    <title>{title}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <link href="/css/weui.css" rel="stylesheet" type="text/css" />
+    <link href="/css/base.css" rel="stylesheet" type="text/css" />
+    <link href="/css/icon.css" rel="stylesheet" type="text/css" />
+    <link href="/css/umc.ui.css" rel="stylesheet" type="text/css" />
+    <link href="/css/umc.css" rel="stylesheet" type="text/css" />
+    <link href="/css/auth.css" rel="stylesheet" type="text/css" />
+  
+    <script src="/js/umc.js" type="text/javascript"></script>
+
+    <script src="/UMC.Conf" type="text/javascript"></script>
+    <script>
+
+        UMC(function ($) {
+
+
+            $.UI.Off('Prompt').On("Prompt", function (e, p) {
+                var msg = $('.el-message').removeClass('el-message-fade-leave-active');
+                msg.find('.el-message__content').html(p.Text);
+                setTimeout(function () {
+                    msg.addClass('el-message-fade-leave-active');
+                }, 3000);
+            }).On("User", function () {
+                var v = UMC.query(location.search.substring(1));
+                if (v.oauth_callback) {
+                    location.href = v.oauth_callback;
+                } else {
+                    location.reload(true);
+                }
+            });
+
+            var login = $('.login-container');
+            login.find('.loginFunc').click(function () {
+                var mp = $(this).parent().cls('scanning');
+
+                login.on(mp.is('.scanning') ? "connect" : 'disconnect');
+            });
+            var root = $('.login-container');
+            login.find('form').submit(function () {
+                var v = $(this).val();
+                $.UI.Command('Account', "Login", v);
+                return false;
+            });
+            $.UI.Command("Account", "Check", "Session", function (xhr) {
+                $.UI.Device = xhr.Device;
+
+                new QRCode(document.getElementById("qrcode"), {
+                    width: 200,
+                    height: 200
+                }).makeCode([UMC.UI.Config().domain || location.origin, '/Auth?', xhr.Device].join(''));
+                $.UI.API("Account", "Check", 'Mqtt', function (cfg) {
+
+                    if (!cfg.client) {
+
+                        login.find(".qrcode_view .context").html("<a>请尝试刷新</a>");
+                        login.find('.loginFunc').click();
+                        return;
+                    }
+                    var client = new Paho.MQTT.Client(cfg.broker, 443, cfg.client);
+                    client.onConnectionLost = function () { };
+                    login.find(".context").click('a', function () {
+                        UMC.UI.Command("Account", "Check", "Session");
+                        login.on("connect");
+                    });
+
+
+                    var timeId = 0;
+                    client.onMessageArrived = function (message) {
+                        var uss = [].concat(JSON.parse(message.payloadString))[0];
+                        if (uss.msg) {
+                            if (uss.msg == 'OK') {
+                                UMC.UI.Command("Account", "Check", "Session");
+                            } else {
+                                clearTimeout(timeId);
+                                login.find(".qrcode_view .context").html(['<b>', uss.msg, '</b>'].join(''));
+                                timeId = setTimeout(function () {
+                                    login.on('disconnect');
+                                    UMC.UI.Command("Account", "Check", "Session");
+                                }, 60000);
+                            }
+                        }
+
+                    };
+
+                    login.on('disconnect', function () {
+                        clearTimeout(timeId);
+                        login.find(".qrcode_view .context").html("<a>刷新二维码</a>");
+                        client.disconnect();
+                    }).on('connect', function () {
+                        client.connect({
+                            useSSL: true,
+                            userName: cfg.user,
+                            password: cfg.pass,
+                            onSuccess: function () {
+                                login.find(".qrcode_view .context").children().remove();
+                                timeId = setTimeout(function () {
+                                    login.on('disconnect');
+                                    UMC.UI.Command("Account", "Check", "Session");
+                                }, 60000);
+                            },
+                            mqttVersion: 4,
+                            onFailure: function (e) {
+                                login.find(".qrcode_view .context").html("<a>扫码错误，请刷新</a>");
+                            }
+                        });
+                    });
+
+                    login.on(UMC.query(location.search.substring(1)).un ? 'disconnect' : 'connect');
+                });
+
+            });
+
+        })</script>
+    <script src="/js/mqttws31.min.js?v.01"></script>
+    <script src="/js/qrcode.min.js?v.01"></script>
+
+</head>
+
+<body>
+    <div role="alert" class="el-message el-message--warning el-message-fade-leave el-message-fade-leave-active" style="z-index: 2100;">
+        <i class="el-message__icon el-icon-success"></i>
+        <p class="el-message__content"></p>
+    </div>
+    <div class="login-container">
+        <form class="el-form login-form el-form--label-left scanning" style="border-radius: 6px; box-shadow: 0 4px 8px 0 rgba(42, 93, 158, .16), 0 0 4px 0 rgba(42, 93, 158, .08); background-color: #fff;width: 300px;" autocomplete="on">
+            <div class="loginFunc">
+                <div class="qrcode"></div>
+                <div class="account"></div>
+            </div>
+            <div class="title-container" style="padding-top:15px; margin-bottom:15px">
+                欢迎使用 {title}！
+            </div>
+            <div class="qrcode_view" style="top: 28%;">
+                <div style="width: 200px; height: 200px; margin: auto; position: relative;">
+                    <div class="context"></div>
+                    <div id="qrcode"></div>
+                    <!--[if IE]> 不支持IE内核的浏览器，推荐使用chrome .如果使用360请切换极速模式<![endif]-->
+                </div>
+                <div style="text-align: center;background-color: #fff;padding: 30px 0;">
+                    请使用钉钉扫描二维码登录
+                </div>
+            </div>
+            <div class="el-form-item user el-input">
+                <input tabindex="1" type="text" required="" autocomplete="on" placeholder="账号" name="Username" class="el-input__inner">
+
+            </div><div class="el-form-item password el-input" tabindex="0">
+
+                <input tabindex="2" type="password" autocomplete="on" placeholder="密码" name="Password" class="el-input__inner">
+            </div><button type="submit" class="el-button el-button--primary el-button--default" style="width: 100%; margin-bottom: 30px;">登录</button>
+        </form>
+    </div>
+    <a id="ICPFiling" href="https://beian.miit.gov.cn" target="_blank"></a>
+</body>
+
+</html>
